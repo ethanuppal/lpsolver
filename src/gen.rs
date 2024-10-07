@@ -1,3 +1,5 @@
+// Copyright (C) 2024 Ethan Uppal. All rights reserved.nn
+
 #[derive(Default)]
 pub struct Gen {
     id: usize,

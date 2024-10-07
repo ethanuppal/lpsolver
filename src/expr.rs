@@ -1,6 +1,10 @@
+// Copyright (C) 2024 Ethan Uppal. All rights reserved.nn
+
 use std::hash::Hash;
 
-use crate::{dense_map::DenseInternedInfoMapKey, real::Real};
+use crate::{dense_map::DenseInternedInfoMapKey, real::BoundedPrecisionReal};
+
+pub type Num = BoundedPrecisionReal<16>;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 pub struct Var(pub usize);
@@ -27,6 +31,6 @@ impl DenseInternedInfoMapKey for ExprIdx {
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum Expr {
-    Coeff(Real<16>, Var),
+    Coeff(Num, Var),
     Sum(ExprIdx, ExprIdx),
 }

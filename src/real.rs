@@ -1,3 +1,5 @@
+// Copyright (C) 2024 Ethan Uppal. All rights reserved.nn
+
 use std::hash::{Hash, Hasher};
 
 const MANTISSA_BITS: usize = 52;
@@ -57,9 +59,9 @@ impl Ord for Float64IEEE754 {
 
 /// A real number with a specified maximum binary precision.
 #[derive(Debug, Clone, Copy)]
-pub struct Real<const PRECISION: usize>(pub f64);
+pub struct BoundedPrecisionReal<const PRECISION: usize>(pub f64);
 
-impl<const PRECISION: usize> Real<PRECISION> {
+impl<const PRECISION: usize> BoundedPrecisionReal<PRECISION> {
     fn canonicalize(&self) -> Float64IEEE754 {
         let Self(value) = self;
         let mut encoding = Float64IEEE754::from(*value);
@@ -68,27 +70,27 @@ impl<const PRECISION: usize> Real<PRECISION> {
     }
 }
 
-impl<const PRECISION: usize> PartialEq for Real<PRECISION> {
+impl<const PRECISION: usize> PartialEq for BoundedPrecisionReal<PRECISION> {
     fn eq(&self, other: &Self) -> bool {
         self.canonicalize() == other.canonicalize()
     }
 }
 
-impl<const PRECISION: usize> Eq for Real<PRECISION> {}
+impl<const PRECISION: usize> Eq for BoundedPrecisionReal<PRECISION> {}
 
-impl<const PRECISION: usize> Hash for Real<PRECISION> {
+impl<const PRECISION: usize> Hash for BoundedPrecisionReal<PRECISION> {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.canonicalize().hash(state)
     }
 }
 
-impl<const PRECISION: usize> PartialOrd for Real<PRECISION> {
+impl<const PRECISION: usize> PartialOrd for BoundedPrecisionReal<PRECISION> {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         Some(self.cmp(other))
     }
 }
 
-impl<const PRECISION: usize> Ord for Real<PRECISION> {
+impl<const PRECISION: usize> Ord for BoundedPrecisionReal<PRECISION> {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         self.canonicalize().cmp(&other.canonicalize())
     }
@@ -100,9 +102,9 @@ impl<const PRECISION: usize> Ord for Real<PRECISION> {
 //     }
 // }
 
-impl<const PRECISION: usize> From<Real<PRECISION>> for f64 {
-    fn from(value: Real<PRECISION>) -> Self {
-        let Real(value) = value;
+impl<const PRECISION: usize> From<BoundedPrecisionReal<PRECISION>> for f64 {
+    fn from(value: BoundedPrecisionReal<PRECISION>) -> Self {
+        let BoundedPrecisionReal(value) = value;
         value
     }
 }

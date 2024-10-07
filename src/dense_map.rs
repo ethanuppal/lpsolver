@@ -1,3 +1,5 @@
+// Copyright (C) 2024 Ethan Uppal. All rights reserved.nn
+
 use std::{collections::HashMap, hash::Hash, marker::PhantomData};
 
 pub trait DenseInternedInfoMapKey
